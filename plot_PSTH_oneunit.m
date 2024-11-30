@@ -15,12 +15,12 @@ for i = 1:size(X_check,2)
     t=linspace(-100,size(B,2)-100,size(B,2));
     plot(t,B','color',c1(i,:),'LineWidth',2)
     
-    statFunc = @(x) mean(x,'omitNaN');
-    ci = bootci(1000, {statFunc, A}, 'alpha', 0.05, 'type', 'percentile');
-    ci = [repmat(ci(:,1),1,100), ci];
-    
-    g=fill([t,t(end:-1:1)],[ci(1,:),ci(2,end:-1:1)],'b');
-    set(g,'FaceColor',c1(i,:),'FaceAlpha',0.2,'EdgeColor','none');
+%     statFunc = @(x) mean(x,'omitNaN');
+%     ci = bootci(1000, {statFunc, A}, 'alpha', 0.05, 'type', 'percentile');
+%     ci = [repmat(ci(:,1),1,100), ci];
+%     
+%     g=fill([t,t(end:-1:1)],[ci(1,:),ci(2,end:-1:1)],'b');
+%     set(g,'FaceColor',c1(i,:),'FaceAlpha',0.2,'EdgeColor','none');
 end
 
 box off

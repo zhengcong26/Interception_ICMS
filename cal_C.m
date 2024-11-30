@@ -1,0 +1,39 @@
+% e4 top
+
+function C = cal_C(pr, Xafter, xstar, C0, mstar)
+% C£ºreadout matrix£¬(2,NN)
+% xstar£ºmatrix£¬(NN,ntrial)
+% mstar£ºcell£¬(1,ntrial)¡£mstar{i} is a matrix£¬(2,n_timepoints)
+% Xafter£ºcell£¬(1,ntrial)¡£Xafter{i} is a matrix£¬(NN,n_timepoints)
+
+tfinal = pr.tfinal;
+n_timepoints = pr.n_timepoints;
+ntrial = pr.ntrial;
+NN = pr.NN;
+NE = pr.NE;
+T = tfinal/(n_timepoints-1);
+
+% C0 = zeros(2,NN);
+fun = @(C) 1/(2*NE)*norm(C,'fro')^2 ...
+    + 10*norm(C*xstar,'fro')^2 ...% make sure no premature movement at the end of movement
+    + norm(C*pr.x_sp,'fro')^2 ...% no movement during prep
+    + 1/ntrial * T * norm( C*max(0,Xafter{1})-mstar{1},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{2})-mstar{2},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{3})-mstar{3},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{4})-mstar{4},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{5})-mstar{5},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{6})-mstar{6},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{7})-mstar{7},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{8})-mstar{8},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{9})-mstar{9},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{10})-mstar{10},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{11})-mstar{11},'fro')^2 ...
+    + 1/ntrial * T * norm( C*max(0,Xafter{12})-mstar{12},'fro')^2;
+
+% options = optimoptions('fminimax','Display','iter');
+% options.MaxFunctionEvaluations = 1000000;
+% [C,fval] = fminimax(fun,C0,[],[],[],[],[],[],[],options);
+options = optimoptions('fminunc','Display','iter','MaxIter',1000000,'MaxFunEvals',1000000); % 
+[C,fval] = fminunc(fun,C0,options);
+
+end
