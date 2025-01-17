@@ -1,8 +1,7 @@
 # Interception_ICMS
 
-These codes reproduce the main figures in manuscript 
+These codes reproduce the key figures presented in the manuscript.
 
-# System Requirements
 ## Hardware requirements
 * All the codes only require a standard computer with enough RAM to support the in-memory operations.
 
