@@ -13,7 +13,7 @@ These codes reproduce the main figures in manuscript
 
 ## Reproducing results from the paper
 * All analysis results presented in the paper can be reproduced using the provided corresponding codes, e.g. Figure_1_codes.m
-* The dataset required to run the code should be downloaded from Zenodo (link coming soon...)
+* The dataset required to run the code should be downloaded from Zenodo at https://zenodo.org/records/14196227 (DOI: 10.5281/zenodo.14196227).
 * To run the code, add the folder to the MATLAB search path, uncomment the relevant dataset, and execute the code corresponding to the specific figure panel.
 
 ## License
