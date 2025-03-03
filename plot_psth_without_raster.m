@@ -18,11 +18,11 @@ set(gcf,'Position',[100,300,700,300])
 
 subplot(2,1,1)
 hold on
-plot_psth(spike_time_TO_zero,spike_time_GO_zero,spike_time_MO_zero,t_TO,t_GO,t_MO,p_dir_1_TO,p_dir_1_GO,p_dir_1_MO,hand_Sur_loc,cor_tri_sp,speed_con,d_step,c1)
+plot_psth(spike_time_TO_zero,spike_time_GO_zero,spike_time_MO_zero,t_TO,t_GO,t_MO,p_dir_1_TO,p_dir_1_GO,p_dir_1_MO,hand_Sur_loc,cor_tri_sp,speed_con(1),d_step,c1)
 
 subplot(2,1,2)
 hold on
-plot_psth(spike_time_TO_zero,spike_time_GO_zero,spike_time_MO_zero,t_TO,t_GO,t_MO,p_dir_2_TO,p_dir_2_GO,p_dir_2_MO,hand_Sur_loc,cor_tri_sp,speed_con,d_step,c2)
+plot_psth(spike_time_TO_zero,spike_time_GO_zero,spike_time_MO_zero,t_TO,t_GO,t_MO,p_dir_2_TO,p_dir_2_GO,p_dir_2_MO,hand_Sur_loc,cor_tri_sp,speed_con(2),d_step,c2)
 
 h1 = subplot(2,1,1);
 pos1 = get(h1, 'Position');
@@ -67,13 +67,13 @@ for i_dir=1:4
     t = T(1):0.05:T(2)-0.05;
     err = 2;
     
-    spk_dir_TO{i_dir,1}=spike_time_TO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con(2) ,:);
+    spk_dir_TO{i_dir,1}=spike_time_TO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con ,:);
     [R_TO,t1,E_TO,~] = psth_NeurAn(spk_dir_TO{i_dir,1},0.05,'n',T,err,t);
     
-    spk_dir_GO{i_dir,1}=spike_time_GO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con(2) ,:);
+    spk_dir_GO{i_dir,1}=spike_time_GO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con ,:);
     [R_GO,t2,E_GO,~] = psth_NeurAn(spk_dir_GO{i_dir,1},0.05,'n',T,err,t);
     
-    spk_dir_MO{i_dir,1}=spike_time_MO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con(2) ,:);
+    spk_dir_MO{i_dir,1}=spike_time_MO_zero(hand_Sur_loc==i_dir&cor_tri_sp==speed_con ,:);
     [R_MO,t3,E_MO,~] = psth_NeurAn(spk_dir_MO{i_dir,1},0.05,'n',T,err,t);
     
     ta = find(t1>= t_TO(1)-0.005 & t1<= t_TO(1)+0.005,1,'last');

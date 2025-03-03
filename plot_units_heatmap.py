@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 
 # Load the MAT file data (Choose the appropriate file by uncommenting)
-mat_data = loadmat(r'G_PSTH_ICMS.mat')
-# mat_data = loadmat(r'L_PSTH_ICMS.mat')
+# mat_data = loadmat(r'G_PSTH_ICMS.mat')
+mat_data = loadmat(r'L_PSTH_ICMS.mat')
 
 selected_key = 'ans'
 data_1 = mat_data[selected_key]
@@ -26,23 +26,20 @@ data = np.delete(data_1, columns_to_delete, axis=1)
 # Get the shape of the data (rows and columns)
 rows, cols = data.shape
 
-# Create a figure with a custom size (height = 8, width = 5)
-plt.figure(figsize=(5, 8)) 
+plt.figure(figsize=(3.5, 9.5)) 
+plt.pcolormesh(data, cmap='RdBu_r', vmin=-10, vmax=10)  # shading='auto' to handle the spacing between cells
 
-
-plt.imshow(data, cmap='RdBu_r', interpolation='nearest', extent=[0, cols, 0, rows], aspect='auto')
+plt.gca().invert_yaxis()  # 反转y轴
 
 # 隐藏坐标轴
 plt.axis('off')
 
-# 添加 colorbar 并设置 scale
-cbar = plt.colorbar()
-plt.clim(-10, 10) 
-cbar.set_ticks([-10, 0, 10])  # 设置刻度位置
+# cbar = plt.colorbar()
+# plt.clim(-10, 10) 
+# cbar.set_ticks([-10, 0, 10])  # 设置刻度位置
+# cbar.outline.set_visible(False)  # 隐藏 colorbar 的轮廓线
 
-cbar.outline.set_visible(False)  # 隐藏 colorbar 的轮廓线
-
-plt.savefig(r'ICMS_heatmap.png', dpi=800)
+plt.savefig(r'L_ICMS_heatmap.svg', dpi=600, format="svg")
 
 plt.show() 
 
@@ -53,43 +50,39 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 
 # Load the data
-mat_data = loadmat(r'G_unit_heatmap.mat')
-# mat_data = loadmat(r'L_unit_heatmap.mat')
+# mat_data = loadmat(r'G_unit_heatmap.mat')
+mat_data = loadmat(r'L_unit_heatmap.mat')
 
 selected_key = 'ZZ'
 data = mat_data[selected_key]
 
 rows, cols = data.shape
 
-# fig, ax = plt.subplots()
-fig, ax = plt.subplots(figsize=(6,12))  # Adjust the figure size here
+# 创建画布
+fig, ax = plt.subplots(figsize=(3, 9.8))
 
-fig.dpi = 600
+# 画热图
+pcmesh = ax.pcolormesh(data, cmap='RdBu_r', vmin=-1.5, vmax=1.5)
 
-# Plot the heatmap
-im = ax.imshow(data, cmap='RdBu_r', interpolation='nearest', extent=[0, cols, 0, 280], aspect=1)
+# 反转y轴，使得数据按正确方向显示
+ax.invert_yaxis()
 
-plt.axis('off')
+# 隐藏坐标轴
+ax.axis('off')
 
-# Mark vertical lines
-ax.axvline(x=11, color='blue', linestyle='-', linewidth=0.6) # TO
-ax.axvline(x=61, color='green', linestyle='-', linewidth=0.6) # GO
-ax.axvline(x=71, color='red', linestyle='-', linewidth=0.6) # MO
-ax.axvline(x=86, color='black', linestyle='-', linewidth=0.6) # TA
+# 添加垂直线
+ax.axvline(x=11, color='blue', linestyle='-', linewidth=1)  # TO
+ax.axvline(x=61, color='green', linestyle='-', linewidth=1)  # GO
+ax.axvline(x=71, color='red', linestyle='-', linewidth=1)  # MO
+ax.axvline(x=86, color='black', linestyle='-', linewidth=1)  # TA
 
-# Set color limits
-im.set_clim(-1.5, 1.5)
+# 设置 colorbar
+# cbar = fig.colorbar(pcmesh, ax=ax, orientation='vertical', fraction=0.05, pad=0.05)
+# cbar.set_ticks([-10, 0, 10])  # 设置刻度
+# cbar.outline.set_visible(False)  # 隐藏 colorbar 轮廓
 
-# Add colorbar
-cbar = plt.colorbar(im, ax=ax, orientation='vertical', fraction=0.05, pad=0.05)
-cbar.set_ticks([-1, 0, 1])  # Set tick marks
+# 保存矢量图
+plt.savefig(r'L_COINT_heatmap.svg', format='svg')
 
-# Adjust colorbar position
-cbar.ax.set_position([0.83, 0.13, 0.6, 0.1])
-cbar.outline.set_visible(False)  # Hide outline of the colorbar
-
-# Save the figure
-plt.savefig(r'units_heatmap.png', dpi=600)
-
-# Show the plot
-plt.show() 
+# 显示图像
+plt.show()

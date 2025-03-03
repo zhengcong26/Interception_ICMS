@@ -50,48 +50,4 @@ load('model_motor_cost.mat') % for Figure 6e and 6f
 motor_cost_CO_n = vertcat(motor_cost_CO{:});
 motor_cost_INT_n = vertcat(motor_cost_INT{:});
 
-%% Figure 6h
 
-load('model_pert_r2_rmse.mat')
-
-for k = 1:size(r2_co,1)
-    for i = 1:size(r2_co,2)
-        for j = 1:size(r2_co,3)
-            try
-                rt_1(k,i,j)=find(squeeze(r2_co(k,i,j,:))>0.9,1);
-            catch
-                rt_1(k,i,j)=size(r2_co,4); %
-            end
-        end
-    end
-end
-
-for k = 1:size(r2_int,1)
-    for i = 1:size(r2_int,2)
-        for j = 1:size(r2_int,3)
-            try
-                rt_2(k,i,j)=find(squeeze(r2_int(k,i,j,:))>0.9,1);
-            catch
-                rt_2(k,i,j)=size(r2_int,4); %
-            end
-        end
-    end
-end
-
-rt_co=(rt_1-1)*20;
-rt_int=(rt_2-1)*20;
-
-rt_co_1 = (reshape(rt_co, 4, 120))';
-rt_int_1 = (reshape(rt_int, 4, 120))';
-
-%% Figure 6i
-
-load('model_u.mat')
- 
-it = [102 120 167];
-
-u = u_INT{1,1};
-plot_u(u,it)
-
-u = u_CO{1,1};
-plot_u(u,it)

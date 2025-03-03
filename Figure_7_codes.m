@@ -6,6 +6,7 @@ dtheta = atand(10.2/30)/10.2;
 scale = 10.2/16*dtheta;
 
 % for n = 1:num 
+
 % for n = 42 % static
 for n = 2 % moving
     %% Initialize figure
@@ -138,101 +139,9 @@ colo=[0.06275	0.30588	0.5451;0.80392	0.33333	0.33333];
 plot_eye_RT_pdf(eye_RT_CO,colo(1,:))
 plot_eye_RT_pdf(eye_RT_INT,colo(2,:))
 
-%% Figure 7c 
-load('G_eye_distance.mat')
+%% Figure 7c
 
-figure
-colo=[0.06275	0.30588	0.5451;0.80392	0.33333	0.33333];
-set(gcf,'Position',[100,100,1100,200]);
-
-for p = 1:4
-    subplot(1,4,p)
-    hold on
-    
-    % Set time range and x-axis limits
-    if p == 1
-        t = 0:1:200;
-        xlim([0,200])
-    else
-        t = -100:1:100;
-        xlim([-100,100])
-    end
-
-    % Extract data for the current subplot
-    a = squeeze(dist_tg_CO(:,p,:));
-    b = squeeze(dist_ct_CO(:,p,:));
-    A = squeeze(dist_tg_INT(:,p,:));
-    B = squeeze(dist_ct_INT(:,p,:));
-    
-    % Identify and remove outliers where values exceed the threshold
-    a_r = any(a > 30, 2);
-    b_r = any(b > 30, 2);
-    A_r = any(A > 30, 2);
-    B_r = any(B > 30, 2);
-    
-    remov_1 = a_r | b_r;
-    remov_2 = A_r | B_r; 
-    
-    a = a(~remov_1, :);
-    b = b(~remov_1, :);
-    A = A(~remov_2, :);
-    B = B(~remov_2, :);
-    
-     % Statistical testing (Rank-Sum Test) for each time point
-    h_a = [];h_b = [];
-    for tt = 1:size(a,2)
-        [~,h_a(tt,1)]=ranksum(a(:,tt),A(:,tt)); % tg
-        [~,h_b(tt,1)]=ranksum(b(:,tt),B(:,tt)); % ct
-    end
-    
-    plot_eye_distance(a,t,colo(1,:),'--')
-    plot_eye_distance(b,t,colo(1,:),'-')
-    plot_eye_distance(A,t,colo(2,:),'--')
-    plot_eye_distance(B,t,colo(2,:),'-')   
-    
-    ylim([0 22])
-    y0 = ylim;
-    
-    % Mark significant differences with horizontal lines
-    for tt = 1:size(h_a,1)
-        if h_a(tt,1)==1
-            plot([t(tt)-2 t(tt)+2],[y0(2)-1 y0(2)-1],'color',[0.62745	0.12549	0.94118],'LineWidth',1.6)
-        end
-        if h_b(tt,1)==1
-            plot([t(tt)-2 t(tt)+2],[y0(1)+1 y0(1)+1],'color',[0.62745	0.12549	0.94118],'LineWidth',1.6)
-        end
-    end
-    
-    plot([0 0],[y0(1) y0(2)],'k:')
-    
-    % Customize axis appearance
-    ax = gca;
-    ax.LineWidth = 1;
-    ax.TickDir = 'out';
-    ax.TickLength = [0.03 0.025];
-    yticklabels([]) % Remove y-axis tick labels
-    set(gca,'XColor', 'none')
-    if p >=2
-        set(gca,'YColor', 'none')
-    end
-
-end
-
-h1 =  subplot(1,4,2);
-pos1 = get(h1, 'Position');
-set(h1, 'Position', [pos1(1)*0.9, pos1(2), pos1(3), pos1(4)]); % [left bottom width height]
-
-h1 = subplot(1,4,3);
-pos1 = get(h1, 'Position');
-set(h1, 'Position', [pos1(1)*0.88, pos1(2), pos1(3), pos1(4)]); % [left bottom width height]
-
-h1 = subplot(1,4,4);
-pos1 = get(h1, 'Position');
-set(h1, 'Position', [pos1(1)*0.87, pos1(2), pos1(3), pos1(4)]); % [left bottom width height]
-
-%% Figure 7d
-
-load('saccade_probability.mat') % for Figure d,g,f,h
+load('saccade_probability.mat') % for Figure c, f, e, g
 
 x_1 = locs_CO_NS;
 x_2 = locs_INT_NS;
@@ -284,17 +193,18 @@ end
 
 ax = gca;
 ax.LineWidth = 0.5;
+ax.TickLength = [0.008 0.025];
 ax.TickDir = 'out';
 
-%% Figure 7g
+%% Figure 7f
 
-% static
-x_1 = locs_CO_NS;
-x_2 = locs_CO_ST;
+% % static
+% x_1 = locs_CO_NS;
+% x_2 = locs_CO_ST;
 
 % moving
-% x_1 = locs_INT_NS;
-% x_2 = locs_INT_ST;
+x_1 = locs_INT_NS;
+x_2 = locs_INT_ST;
 
 colo=[0.4	0.80392	0.66667;0.4902	0.14902	0.80392;1	0.44706	0.33725];
 
@@ -317,7 +227,8 @@ counts1 = data1;
 counts2 = data2;
 
 figure
-set(gcf,'Position',[100,100,400,120]);
+% set(gcf,'Position',[100,100,400,120]);
+set(gcf,'Position',[100,100,220,100]);
 hold on
 h1 = histogram(x_1, 'BinEdges', binEdges, 'Normalization', 'probability');
 h1.FaceColor = colo(1,:);
@@ -346,24 +257,21 @@ ax = gca;
 ax.LineWidth = 0.5;
 ax.TickDir = 'out';
 
-%% Figure 7f,h
+%% Figure 7e, g
 
-% Figure 7f static
-x_1 = cos_thetas_CO_NS(locs_CO_NS>-900&locs_CO_NS<-500);
-x_2 = cos_thetas_INT_NS(locs_INT_NS>-900&locs_INT_NS<-500);
+% %  Figure 7e GO -0.5  +0.1
+x_1 = cos_thetas_CO_NS(locs_CO_NS>-500&locs_CO_NS<100);
+x_2 = cos_thetas_INT_NS(locs_INT_NS>-500&locs_INT_NS<100);
 colo=[0.06275	0.30588	0.5451;0.80392	0.33333	0.33333];
 
-% % Figure 7f moving
-% x_1 = cos_thetas_CO_NS(locs_CO_NS>-500&locs_CO_NS<100);
-% x_2 = cos_thetas_INT_NS(locs_INT_NS>-500&locs_INT_NS<100);
-% colo=[0.06275	0.30588	0.5451;0.80392	0.33333	0.33333];
-
-% % Figure 7h static
+% % Figure 7g
+% % static
 % x_1 = cos_thetas_CO_NS(locs_CO_NS>-100&locs_CO_NS<100);
 % x_2 = cos_thetas_CO_ST(locs_CO_ST>-100&locs_CO_ST<100);
 % colo=[0.4	0.80392	0.66667;0.4902	0.14902	0.80392;1	0.44706	0.33725];
 
-% % Figure 7h moving
+% % Figure 7g
+% % moving
 % x_1 = cos_thetas_INT_NS(locs_INT_NS>-100&locs_INT_NS<100);
 % x_2 = cos_thetas_INT_ST(locs_INT_ST>-100&locs_INT_ST<100);
 % colo=[0.4	0.80392	0.66667;0.4902	0.14902	0.80392;1	0.44706	0.33725];
@@ -386,7 +294,7 @@ counts1 = data1;
 counts2 = data2;
 
 figure
-set(gcf,'Position',[100,100,180,120]);
+set(gcf,'Position',[100,100,150,100]);
 hold on
 h1 = histogram(x_1, 'BinEdges', binEdges, 'Normalization', 'probability');
 h1.FaceColor = colo(1,:);
@@ -412,6 +320,7 @@ for i = 1:length(counts1)
 end
 
 ax = gca;
-ax.LineWidth = 1;
+ax.LineWidth = 0.5;
+ax.TickLength = [0.02 0.025];
 ax.TickDir = 'out';
 

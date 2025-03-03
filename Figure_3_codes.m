@@ -1,85 +1,17 @@
 %% Figure 3a
 % plot_units_heatmap.py
 
-%% Figure 3bc 
-
-% panel 3b
-% load('G_0914_PC_NSST_PreGO.mat')
-
-% panel 3c
-load('G_0914_PC_NSST_PreMO.mat')
-
-t_start = -200;
-t_end = 400;
-bin = 20;
-
-ses = 1;
-para = 4;
-q = 1;
-
-% PC
-CO_NS_PC = squeeze(J_C_m(ses,para,:,:));
-CO_ST_PC = squeeze(J_C_m(ses,para+4,:,:));
-INT_NS_PC = squeeze(J_C_m(ses,para+8,:,:));
-INT_ST_PC = squeeze(J_C_m(ses,para+12,:,:));
-
-% CI
-CO_NS_ciL = squeeze(J_ciLower(ses,para,:,:));
-CO_ST_ciL = squeeze(J_ciLower(ses,para+4,:,:));
-INT_NS_ciL = squeeze(J_ciLower(ses,para+8,:,:));
-INT_ST_ciL = squeeze(J_ciLower(ses,para+12,:,:));
-
-CO_NS_ciU = squeeze(J_ciUpper(ses,para,:,:));
-CO_ST_ciU = squeeze(J_ciUpper(ses,para+4,:,:));
-INT_NS_ciU = squeeze(J_ciUpper(ses,para+8,:,:));
-INT_ST_ciU = squeeze(J_ciUpper(ses,para+12,:,:)); 
-
-% ICMS
-CO_icms_1 = squeeze(J_ICMSp(ses,1,para,6));
-CO_icms_2 = squeeze(J_ICMSp(ses,2,para,6));
-INT_icms_1 = squeeze(J_ICMSp(ses,1,para,8));
-INT_icms_2 = squeeze(J_ICMSp(ses,2,para,8));
-
-% RT MT
-CO_NS_RT = squeeze(J_RTMT_mean(ses,1,para,5));
-CO_NS_MT = squeeze(J_RTMT_mean(ses,2,para,5));
-CO_ST_RT = squeeze(J_RTMT_mean(ses,1,para,6));
-CO_ST_MT = squeeze(J_RTMT_mean(ses,2,para,6));
-
-INT_NS_RT = squeeze(J_RTMT_mean(ses,1,para,7));
-INT_NS_MT = squeeze(J_RTMT_mean(ses,2,para,7));
-INT_ST_RT = squeeze(J_RTMT_mean(ses,1,para,8));
-INT_ST_MT = squeeze(J_RTMT_mean(ses,2,para,8));
-
-% significance
-p_value_CO=[];p_value_INT=[];
-for t = 1:size(CO_NS_PC,1)
-    for i = 1:3
-        [~, p_value_CO(t,i)] = ttest_from_ci(CO_NS_PC(t,i), [CO_NS_ciL(t,i), CO_NS_ciU(t,i)], 100, CO_ST_PC(t,i), [CO_ST_ciL(t,i), CO_ST_ciU(t,i)], 100, 0.05);
-        [~, p_value_INT(t,i)] = ttest_from_ci(INT_NS_PC(t,i), [INT_NS_ciL(t,i), INT_NS_ciU(t,i)], 100, INT_ST_PC(t,i), [INT_ST_ciL(t,i), INT_ST_ciU(t,i)], 100, 0.05);
-    end
-end
-
-p_value_CO(p_value_CO>=0.05)=0;
-p_value_CO(p_value_CO<0.05&p_value_CO>0)=1;
-
-p_value_INT(p_value_INT>=0.05)=0;
-p_value_INT(p_value_INT<0.05&p_value_INT>0)=1;
-
-t = t_start:bin:t_end;
-plot_PC_4_2(J_C_m,J_ciLower,J_ciUpper,J_ICMSp,J_RTMT_mean,ses,t)
-
-%% Figure 3de 3D 
+%% Figure 3bc 3D 
 
 load('G_0914_PC_NSST_PreGO_3D.mat')
+
+% para = 5; ym = ys_m_CO; % long CO
+para = 7; ym = ys_m_INT; % long INT
 
 T = -2000:2:2000; % Time vector
 t_start = -1000;
 t0 = find(T == 0);
 t1 = find(T == 0) + t_start / 2;
-
-para = 5; ym = ys_m_CO; % long CO
-% para = 7; ym = ys_m_INT; % long INT
 
 colo = [0.4 0.80392 0.66667; 0.4902 0.14902 0.80392; 1 0.44706 0.33725]; % Colors for different conditions
 figure
@@ -155,7 +87,14 @@ xlabel(['PC1 v=' num2str(round(explained(1))) '%']);
 ylabel(['PC2 v=' num2str(round(explained(2))) '%']);
 zlabel(['PC3 v=' num2str(round(explained(3))) '%']);
 
-%% Figure 3de 3PCs 
+% i = 1:2:t;
+% temp = ys_m_NS(i, 1:3);
+% 
+% i = 1:2:icms_1-1;
+% i = icms_2+1:2:t;
+% temp = ys_m_ST(i, 1:3);
+
+%% Figure 3bc 3PCs 
 
 load('G_0914_PC_NSST_PreGO_3PCs.mat')
 
@@ -232,7 +171,7 @@ plot_PC(INT_NS_PC,INT_ST_PC,INT_NS_ciL,INT_ST_ciL,INT_NS_ciU,INT_ST_ciU,INT_icms
 
 % plot_PC_4(J_C_m,J_ciLower,J_ciUpper,J_ICMSp,J_RTMT_mean,ses,t)
 
-%% Figure 3fg CCF
+%% Figure 3de CCF
 % G
 load('G_-120_GO_CCF.mat')
 load('G_-240_GO_CCF.mat')
@@ -262,15 +201,15 @@ temp = squeeze(lagTime_1(1,1,:));
 lagTime(:,1) = reshape(lagTime_1,size(lagTime_1,1)*size(lagTime_1,2),1);
 lagTime(:,2) = reshape(lagTime_2,size(lagTime_2,1)*size(lagTime_2,2),1);
 
-%% Figure 3h neural distance
+%% Figure 3f neural distance
 
 % Time vector and load data
 t_start = -600;
 t_end = 300;
 t = t_start:2:t_end;
 
-% Load data
-% load('_neural_distance.mat')
+% % Load data
+% load('G_neural_distance.mat')
 % icms_2 = find(t == 0) + 8; % G
 % icms_1 = find(t == -410); % G
 
@@ -282,11 +221,10 @@ JJJ_EDsingle_s = [];
 % Loop through the data and extract relevant time windows for each condition
 for i = 1:size(JJ_EDsingle_s, 1)
     for j = 1:size(JJ_EDsingle_s, 3)
+        % Extract ICMS times
+        icms_co = JJ_ICMSp(i, 2, j, 6);
+        icms_int = JJ_ICMSp(i, 2, j, 8);
         try
-            % Extract ICMS times
-            icms_co = J_ICMSp(i, 2, j, 6);
-            icms_int = J_ICMSp(i, 2, j, 8);
-
             % Extract data for each condition, using ICMS times and t_start/t_end
             JJJ_EDsingle_s(i, 1, j, :) = JJ_EDsingle_s(i, 1, j, icms_co + t_start / 2 : icms_co + t_end / 2);
             JJJ_EDsingle_s(i, 2, j, :) = JJ_EDsingle_s(i, 2, j, icms_int + t_start / 2 : icms_int + t_end / 2);
@@ -336,6 +274,10 @@ plot(t(icms_2:end) - shift, C(1, icms_2:end), 'Color', colo(1, :), 'LineWidth', 
 g = fill([t(icms_2:end) - shift, t(end:-1:icms_2) - shift], [ci_1(1, icms_2:end), ci_1(2, end:-1:icms_2)], 'b');
 set(g, 'FaceColor', colo(1, :), 'FaceAlpha', 0.2, 'EdgeColor', 'none');
 
+
+
+
+
 % Repeat for the second condition (C2)
 plot(t(1:icms_1), C(2, 1:icms_1), 'Color', colo(2, :), 'LineWidth', 1.5);
 g = fill([t(1:icms_1), t(icms_1:-1:1)], [ci_2(1, 1:icms_1), ci_2(2, icms_1:-1:1)], 'b');
@@ -345,6 +287,10 @@ set(g, 'FaceColor', colo(2, :), 'FaceAlpha', 0.2, 'EdgeColor', 'none');
 plot(t(icms_2:end) - shift, C(2, icms_2:end), 'Color', colo(2, :), 'LineWidth', 1.5);
 g = fill([t(icms_2:end) - shift, t(end:-1:icms_2) - shift], [ci_2(1, icms_2:end), ci_2(2, end:-1:icms_2)], 'b');
 set(g, 'FaceColor', colo(2, :), 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+
+
+
+
 
 % Mark significant time points based on the p-value from the Wilcoxon test
 y0 = ylim;
@@ -371,7 +317,7 @@ plot([t_start + 10, t_start + 10 + 100], [y0(1), y0(1)], 'k', 'LineWidth', 1.5);
 
 axis off
 
-%% Figure 3i neural speed
+%% Figure 3g neural speed
 
 % Time vector and window size
 t_start = -600;
@@ -380,13 +326,13 @@ windowSize = 5; % Define window size for median filter
 t = t_start:2:t_end;
 
 % Load data
-load('G_neural_speed.mat')
-icms_2 = find(t == 0)+8; % G
-icms_1 = find(t==-410); % G
+% load('G_neural_speed.mat')
+% icms_2 = find(t == 0)+8; % G
+% icms_1 = find(t==-410); % G
 
-% load('L_neural_speed.mat')
-% icms_2 = find(t == 0)+2;
-% icms_1 = find(t==-420);
+load('L_neural_speed.mat')
+icms_2 = find(t == 0)+2;
+icms_1 = find(t==-420);
 
 vel = [];
 for i = 1:length(J_xyz_v)

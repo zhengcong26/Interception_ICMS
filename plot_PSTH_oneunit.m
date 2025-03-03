@@ -15,6 +15,8 @@ for i = 1:size(X_check,2)
     t=linspace(-100,size(B,2)-100,size(B,2));
     plot(t,B','color',c1(i,:),'LineWidth',2)
     
+    temp_1 = t';
+    temp_2(:,i)=B;
 %     statFunc = @(x) mean(x,'omitNaN');
 %     ci = bootci(1000, {statFunc, A}, 'alpha', 0.05, 'type', 'percentile');
 %     ci = [repmat(ci(:,1),1,100), ci];

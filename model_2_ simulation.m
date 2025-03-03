@@ -5,7 +5,7 @@ load('model_workspace.mat')
 %% simulating unperturb condition
 
 delay = 700;
-repetition = 1;
+repetition = 10;
 
 X_CO = nan(repetition,pr.ntrial,pr.NN,pr.tfinal+pr.t_move);
 X_INT = nan(repetition,pr.ntrial,pr.NN,pr.tfinal+pr.t_move);
@@ -105,7 +105,7 @@ end
 
 %% simulating perturbed condition
  
-pr.lambda = 0.1;
+pr.lambda = 1;
 repetition = 1;
 delay = 700:20:1000;
 pert_amp = [0 20 30 40];

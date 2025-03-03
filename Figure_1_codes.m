@@ -46,7 +46,7 @@ disp(['Proportion of RAND trials: ', num2str(length(RAND) / length(A))]);
 
 % Uncomment the following line to load the data file
 % load('G_J_COINT_behaviors.mat')
-% load('L_J_COINT_behaviors.mat')
+load('L_J_COINT_behaviors.mat')
 
 figure;
 set(gcf, 'unit', 'centimeters', 'position', [10, 5, 15, 15]);
@@ -111,11 +111,23 @@ for q = 1:4
     end
 end
 
+C = J_tran_group;
+col_indices = [24, 25]; 
+C = C(:);  
+max_rows = max(cellfun(@(x) size(x,1), C));
+num_cells = numel(C);
+result_matrix = NaN(max_rows, num_cells * length(col_indices)); 
+for i = 1:num_cells
+    data = C{i}(:, col_indices); 
+    rows = size(data, 1); 
+    result_matrix(1:rows, (i-1)*2 + (1:2)) = data;
+end
+
 %% Figure 1e
 
 % monkey G
-load('G_J_COINT_behaviors.mat')
-load('G_COINT_rotrj.mat')
+% load('G_J_COINT_behaviors.mat')
+% load('G_COINT_rotrj.mat')
 
 % % mongkey L
 load('L_J_COINT_behaviors.mat')
@@ -223,13 +235,25 @@ end
 % Plot reference line for scale
 plot([-50, -30], [-70, -70], 'k', 'LineWidth', 1);
 
+C = XYr;
+col_indices = [1, 2]; 
+C = C(:);  
+max_rows = max(cellfun(@(x) size(x,1), C));
+num_cells = numel(C);
+result_matrix = NaN(max_rows, num_cells * length(col_indices)); 
+for i = 1:num_cells
+    data = C{i}(:, col_indices); 
+    rows = size(data, 1);
+    result_matrix(1:rows, (i-1)*2 + (1:2)) = data; 
+end
+
 %% Figure 1f
 
 % monkey G
-% load('G_J_COINT_behaviors.mat')
+load('G_J_COINT_behaviors.mat')
 
 % % monkey L
-load('L_J_COINT_behaviors.mat')
+% load('L_J_COINT_behaviors.mat')
 
 % Define the velocity grouping and time vector
 tran_v = J_tran_group;

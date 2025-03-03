@@ -6,6 +6,7 @@ ntrial = size(hand,2);
 endColor = colo;
 c1 = gradient_ramp(endColor,ntrial,5);
 
+temp_1 = [];temp_2 = [];
 figure
 set(gcf,'position',[30,300,300,300]);
 hold on
@@ -14,6 +15,8 @@ for trial = 1:ntrial
     
     for i = 1:size(y_check,1)
         plot(squeeze(y_check(i,trial,1,:)), squeeze(y_check(i,trial,2,:)),'color',c1(trial,:),'linewidth',2)
+        temp_1(trial,i,:)=squeeze(y_check(i,trial,1,:));
+        temp_2(trial,i,:)=squeeze(y_check(i,trial,2,:));
     end
 
     box off
@@ -22,5 +25,8 @@ for trial = 1:ntrial
     xlim([-20 20]);
     ylim([-20 20]);
 end
-    
+
+a = 1;
+
 end
+

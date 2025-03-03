@@ -5,7 +5,7 @@
 load('sesbehaviors_G_14ses.mat')
 
 % monkey L
-% load('sesbehaviors_L_12ses')
+% load('sesbehaviors_L_15ses.mat')
 
 % Main scatter plot
 figure;
@@ -85,8 +85,8 @@ radius_static = [12.34; -19.78; -4.85; 11.73; 25.99; 27.36; 18.64; 35.59; 0.79; 
 radius_moving = [-14.69; -34.48; -3.16; 14.71; -19.94; 5.22; -44.54; 20.73; -31.39; -33.92; -29.86; 13.32; -15.89; -36.19];
 
 % Choose which data to use (static or moving)
-% radius = radius_static;
-radius = radius_moving;
+radius = radius_static;
+% radius = radius_moving;
 
 colo = [0 0.60392 0.80392; 0.81961 0.37255 0.93333];
 figure;
