@@ -1,6 +1,7 @@
 
 function plot_session_structure(RAND, velocity_list, colo)
     
+%     n = 1;
     for k = 1:length(RAND)
         for i = 1:length(velocity_list)
             % Check if the third element in the first row of velocity_list matches RAND(k)
@@ -26,10 +27,16 @@ function plot_session_structure(RAND, velocity_list, colo)
                 plot(x, y, 'color', colo, 'linewidth', 1.5);
                 hold on
                 
+%                 temp(1:10,n) = x;
+%                 temp(11,n) = NaN;
+%                 temp(12:21,n) = y;
+%                 n = n+1;
+                
                 % Mark the end of the trajectory with a circle marker
                 scatter(x(end), y(end), 40, 'o', 'MarkerEdgeColor', colo, 'LineWidth', 1.5);
             end
         end
     end
-
+    
 end
+

@@ -2,7 +2,7 @@
 %% Figure 1c
 % Uncomment the following line to load the data file and set the trial constraint value
 % load('G_0914_J_bin_20msBin_4s.mat'); trialconstraint = 675; % monkey G
-% load('L_0818_J_bin_20msBin_4s.mat'); trialconstraint = 644; % monkey L
+load('L_0818_J_bin_20msBin_4s.mat'); trialconstraint = 644; % monkey L
 
 % designed static condition
 CO = stim_list(stim_list(:,2) == 0 & stim_list(:,3) == 0 & ...

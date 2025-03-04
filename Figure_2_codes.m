@@ -1,4 +1,91 @@
 
+%% Figure 2c
+
+% Uncomment the following line to load the data file
+% load('G_J_NSST_behavior.mat')
+load('L_J_NSST_behavior.mat')
+
+tran1 = cellfun(@(x,y) ([x;y]),J_GO_raw(:,1:4),J_GO_raw(:,5:8),'UniformOutput',0);
+tran2 = cellfun(@(x,y) ([x;y]),J_MO_raw(:,1:4),J_MO_raw(:,5:8),'UniformOutput',0);
+J_tran_group = tran1;
+J_tran_group(:,2) = cellfun(@(x,y) ([x;y]),J_tran_group(:,2),tran2(:,2),'UniformOutput',0);
+J_tran_group(:,4) = cellfun(@(x,y) ([x;y]),J_tran_group(:,4),tran2(:,4),'UniformOutput',0);
+
+figure;
+set(gcf, 'unit', 'centimeters', 'position', [10, 5, 15, 15]);
+pos = [2, 1, 3, 4]; % Subplot positions
+colo = [0.4	0.80392	0.66667;0.4	0.80392	0.66667;0.4902	0.14902	0.80392;0.4902	0.14902	0.80392];
+linestyle = {':','-',':','-'};
+
+for q = 1:4
+    subplot(2, 2, pos(q)); hold on;
+    
+    % Define rotation matrix M based on the quadrant
+    if q == 1
+        M = [cos(pi/4), sin(pi/4); -sin(pi/4), cos(pi/4)];
+    elseif q == 2
+        M = [cos(pi/4), -sin(pi/4); sin(pi/4), cos(pi/4)];
+    elseif q == 3
+        M = [cos(3*pi/4), -sin(3*pi/4); sin(3*pi/4), cos(3*pi/4)];
+    else
+        M = [cos(3*pi/4), sin(3*pi/4); -sin(3*pi/4), cos(3*pi/4)];
+    end
+    
+    % Plot reference arc lines with rotation
+    R1 = [[-5, 5]; [0, 0]]; R2 = M * R1;
+    plot(R2(1, :), R2(2, :), ':k', 'LineWidth', 0.8);
+    R1 = [[0, 0]; [-5, 5]]; R2 = M * R1;
+    plot(R2(1, :), R2(2, :), ':k', 'LineWidth', 0.8);
+    
+    % Plot arc for trajectory
+    the = pi/4:pi/180:3*pi/4; r = 16;
+    x = r * cos(the); y = -16 + r * sin(the);
+    R1 = [x; y]; R2 = M * R1;
+    plot(R2(1, :), R2(2, :), ':k', 'LineWidth', 1);
+    
+    % Plot error tolerance region
+    the = 0:pi/180:2*pi; r = 4.5;
+    x = r * cos(the); y = r * sin(the);
+    R1 = [x; y]; R2 = M * R1;
+    fill(R2(1, :), R2(2, :), 'b', 'FaceAlpha', 0.08, 'EdgeColor', 'none');
+    
+    % Plot data for each condition
+    for c = 1:4
+        X = J_tran_group{q, c}(:, 24);
+        Y = J_tran_group{q, c}(:, 25);
+        
+        % Plot error ellipse
+        [~,~,~,X0,Y0,r_ellipse] = ErrorEllipse([X, Y], 0.95, colo, '-', 'k', 1, 0);
+        R1 = [r_ellipse(:, 1) + X0, r_ellipse(:, 2) + Y0]; R2 = M * R1';
+        plot(R2(1, :), R2(2, :), 'Color', colo(c, :), 'LineStyle', linestyle{c}, 'LineWidth', 2.2);
+        
+        % Plot center point
+        R1 = [X0; Y0]; R2 = M * R1;
+        scatter(R2(1), R2(2), 70, 'b', 'd', 'MarkerEdgeColor', colo(c, :), 'LineWidth', 2.2);
+        
+        % Set axis properties
+        axis([-7 7 -7 7]); axis square; box off; axis off;
+        set(gca, 'LineWidth', 2);
+        
+        % Scale bar in bottom-left plot
+        if q == 3
+            plot([-6, -6], [-4, -4 + 2 * 16 / 10.2], 'k', 'LineWidth', 1);
+        end
+    end
+end
+
+C = J_tran_group;
+col_indices = [24, 25]; 
+C = C(:);  
+max_rows = max(cellfun(@(x) size(x,1), C));
+num_cells = numel(C);
+result_matrix = NaN(max_rows, num_cells * length(col_indices)); 
+for i = 1:num_cells
+    data = C{i}(:, col_indices); 
+    rows = size(data, 1); 
+    result_matrix(1:rows, (i-1)*2 + (1:2)) = data;
+end
+
 %% Figure 2e
 
 % monkey G
