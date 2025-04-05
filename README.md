@@ -1,6 +1,6 @@
 # Interception_ICMS
 
-These codes reproduce the main figures in manuscript 
+These codes reproduce the main figures in manuscript Zheng, C., Wang, Q. & Cui, H. Continuous sensorimotor transformation enhances robustness of neural dynamics to perturbation in macaque motor cortex. Nat Commun 16, 3213 (2025). https://doi.org/10.1038/s41467-025-58421-1
 
 # System Requirements
 ## Hardware requirements
